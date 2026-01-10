@@ -3,7 +3,14 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HouseProvider } from "@/contexts/HouseContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
+import HouseLanding from "./pages/HouseLanding";
+import EventsPage from "./pages/EventsPage";
+import EventDetailPage from "./pages/EventDetailPage";
+import AboutPage from "./pages/AboutPage";
+import RulesPage from "./pages/RulesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -11,15 +18,23 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <HouseProvider>
+        <AuthProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/house/:slug" element={<HouseLanding />} />
+              <Route path="/house/:slug/eventos" element={<EventsPage />} />
+              <Route path="/house/:slug/evento/:eventId" element={<EventDetailPage />} />
+              <Route path="/house/:slug/sobre" element={<AboutPage />} />
+              <Route path="/house/:slug/regras" element={<RulesPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </HouseProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
