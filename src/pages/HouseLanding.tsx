@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/layout/Layout';
 import { EventsList } from '@/components/events/EventsList';
@@ -12,10 +12,15 @@ export default function HouseLanding() {
   const { house, isLoading, error, setHouseBySlug } = useHouse();
 
   useEffect(() => {
-    if (slug && (!house || house.slug !== slug)) {
+    if (!slug || slug.startsWith(':')) return;
+    if (!house || house.slug !== slug) {
       setHouseBySlug(slug);
     }
   }, [slug, house, setHouseBySlug]);
+
+  if (!slug || slug.startsWith(':')) {
+    return <Navigate to="/" replace />;
+  }
 
   if (isLoading) {
     return (

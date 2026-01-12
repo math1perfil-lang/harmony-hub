@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { EventsList } from '@/components/events/EventsList';
 import { useHouse } from '@/contexts/HouseContext';
@@ -11,10 +11,15 @@ export default function EventsPage() {
   const { house, isLoading, setHouseBySlug } = useHouse();
 
   useEffect(() => {
-    if (slug && (!house || house.slug !== slug)) {
+    if (!slug || slug.startsWith(':')) return;
+    if (!house || house.slug !== slug) {
       setHouseBySlug(slug);
     }
   }, [slug, house, setHouseBySlug]);
+
+  if (!slug || slug.startsWith(':')) {
+    return <Navigate to="/" replace />;
+  }
 
   if (isLoading || !house) {
     return (

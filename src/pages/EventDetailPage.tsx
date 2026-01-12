@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Layout } from '@/components/layout/Layout';
@@ -20,7 +20,8 @@ export default function EventDetailPage() {
   const { user, profile } = useAuth();
 
   useEffect(() => {
-    if (slug && (!house || house.slug !== slug)) {
+    if (!slug || slug.startsWith(':')) return;
+    if (!house || house.slug !== slug) {
       setHouseBySlug(slug);
     }
   }, [slug, house, setHouseBySlug]);
@@ -56,6 +57,10 @@ export default function EventDetailPage() {
     enabled: !!eventId && !!profile?.id,
   });
 
+  if (!slug || slug.startsWith(':')) {
+    return <Navigate to="/" replace />;
+  }
+
   if (houseLoading || eventLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -77,7 +82,7 @@ export default function EventDetailPage() {
             O evento que você procura não existe ou não está mais disponível.
           </p>
           <Button asChild>
-            <Link to={`/house/${slug}/eventos`}>
+            <Link to={`/${slug}/eventos`}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Ver Eventos
             </Link>
@@ -93,12 +98,12 @@ export default function EventDetailPage() {
 
   const handleJoinList = async () => {
     if (!user) {
-      window.location.href = `/house/${slug}/login?redirect=/house/${slug}/evento/${eventId}`;
+      window.location.href = `/${slug}/login?redirect=/${slug}/evento/${eventId}`;
       return;
     }
 
     if (!profile) {
-      window.location.href = `/house/${slug}/completar-perfil?redirect=/house/${slug}/evento/${eventId}`;
+      window.location.href = `/${slug}/completar-perfil?redirect=/${slug}/evento/${eventId}`;
       return;
     }
 
@@ -137,7 +142,7 @@ export default function EventDetailPage() {
         {/* Back Button */}
         <div className="absolute top-6 left-6">
           <Button variant="secondary" size="sm" asChild className="glass">
-            <Link to={`/house/${slug}/eventos`}>
+            <Link to={`/${slug}/eventos`}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Voltar
             </Link>
@@ -258,7 +263,7 @@ export default function EventDetailPage() {
 
                   {profile?.is_subscriber && participation?.status === 'confirmed' && (
                     <Button variant="outline" className="w-full" asChild>
-                      <Link to={`/house/${slug}/evento/${eventId}/social`}>
+                      <Link to={`/${slug}/evento/${eventId}/social`}>
                         <Users className="mr-2 h-5 w-5" />
                         Área Social
                       </Link>
@@ -276,7 +281,7 @@ export default function EventDetailPage() {
                       Assinantes têm acesso à área social exclusiva para se conectar antes do evento.
                     </p>
                     <Button size="sm" variant="outline" asChild className="w-full">
-                      <Link to={`/house/${slug}/assinatura`}>
+                      <Link to={`/${slug}/assinatura`}>
                         Ver Planos
                       </Link>
                     </Button>

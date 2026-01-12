@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HouseProvider } from "@/contexts/HouseContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
@@ -25,6 +25,11 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+
+              {/* Backward compatibility */}
+              <Route path="/house/:slug" element={<Navigate to="/:slug" replace />} />
+              <Route path="/house/:slug/*" element={<Navigate to="/:slug" replace />} />
+
               <Route path="/:slug" element={<HouseLanding />} />
               <Route path="/:slug/eventos" element={<EventsPage />} />
               <Route path="/:slug/evento/:eventId" element={<EventDetailPage />} />
