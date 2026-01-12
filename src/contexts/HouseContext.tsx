@@ -49,10 +49,22 @@ export function HouseProvider({ children }: { children: ReactNode }) {
       const hostname = window.location.hostname;
       const pathname = window.location.pathname;
       
-      // Check for /house/:slug pattern
-      const slugMatch = pathname.match(/^\/house\/([^/]+)/);
-      if (slugMatch) {
-        await setHouseBySlug(slugMatch[1]);
+      // Check for /:slug pattern (new routing)
+      const directSlugMatch = pathname.match(/^\/([^/]+)/);
+      if (directSlugMatch) {
+        const candidate = directSlugMatch[1];
+        // Ignore placeholders like ":slug" and known non-tenant routes
+        const reserved = new Set(['', 'house', 'login', 'cadastro']);
+        if (!candidate.startsWith(':') && !reserved.has(candidate)) {
+          await setHouseBySlug(candidate);
+          return;
+        }
+      }
+
+      // Backward compatibility: /house/:slug pattern
+      const legacyMatch = pathname.match(/^\/house\/([^/]+)/);
+      if (legacyMatch) {
+        await setHouseBySlug(legacyMatch[1]);
         return;
       }
 
