@@ -18,7 +18,7 @@ export function EventCard({ event, houseSlug }: EventCardProps) {
   const isUpcoming = eventDate >= new Date();
 
   return (
-    <Link to={`/house/${houseSlug}/evento/${event.id}`}>
+    <Link to={`/${houseSlug}/evento/${event.id}`}>
       <Card className="group overflow-hidden hover-lift bg-card border-border/50 hover:border-primary/50 transition-all duration-300">
         {/* Image */}
         <div className="relative aspect-[16/10] overflow-hidden">

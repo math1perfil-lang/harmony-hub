@@ -4,7 +4,7 @@ import { Shield, Heart } from 'lucide-react';
 
 export function Footer() {
   const { house } = useHouse();
-  const basePath = house ? `/house/${house.slug}` : '';
+  const basePath = house ? `/${house.slug}` : '';
   const currentYear = new Date().getFullYear();
 
   return (

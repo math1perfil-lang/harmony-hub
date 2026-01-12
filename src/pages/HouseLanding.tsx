@@ -70,13 +70,13 @@ export default function HouseLanding() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Button size="lg" asChild className="bg-gradient-primary hover:opacity-90 shadow-glow">
-                <Link to={`/house/${house.slug}/eventos`}>
+                <Link to={`/${house.slug}/eventos`}>
                   Ver Eventos
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to={`/house/${house.slug}/sobre`}>Conhecer a Casa</Link>
+                <Link to={`/${house.slug}/sobre`}>Conhecer a Casa</Link>
               </Button>
             </div>
           </div>
@@ -131,7 +131,7 @@ export default function HouseLanding() {
               </p>
             </div>
             <Button variant="outline" asChild>
-              <Link to={`/house/${house.slug}/eventos`}>
+              <Link to={`/${house.slug}/eventos`}>
                 <Calendar className="mr-2 h-4 w-4" />
                 Ver Todos
               </Link>
@@ -152,7 +152,7 @@ export default function HouseLanding() {
             Crie sua conta e tenha acesso exclusivo à nossa área social, conecte-se com outros participantes antes dos eventos.
           </p>
           <Button size="lg" asChild className="bg-gradient-primary hover:opacity-90 shadow-glow">
-            <Link to={`/house/${house.slug}/cadastro`}>
+            <Link to={`/${house.slug}/cadastro`}>
               Criar Minha Conta
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>

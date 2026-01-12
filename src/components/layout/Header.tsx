@@ -17,7 +17,7 @@ export function Header() {
   const { user, profile, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const basePath = house ? `/house/${house.slug}` : '';
+  const basePath = house ? `/${house.slug}` : '';
 
   const navItems = [
     { label: 'Início', href: basePath || '/' },
