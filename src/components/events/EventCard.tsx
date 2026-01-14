@@ -8,17 +8,16 @@ import type { Event } from '@/types/database';
 
 interface EventCardProps {
   event: Event;
-  houseSlug: string;
 }
 
-export function EventCard({ event, houseSlug }: EventCardProps) {
+export function EventCard({ event }: EventCardProps) {
   const eventDate = parseISO(event.event_date);
   const formattedDate = format(eventDate, "d 'de' MMMM", { locale: ptBR });
   const dayOfWeek = format(eventDate, 'EEEE', { locale: ptBR });
   const isUpcoming = eventDate >= new Date();
 
   return (
-    <Link to={`/${houseSlug}/evento/${event.id}`}>
+    <Link to={`/evento/${event.id}`}>
       <Card className="group overflow-hidden hover-lift bg-card border-border/50 hover:border-primary/50 transition-all duration-300">
         {/* Image */}
         <div className="relative aspect-[16/10] overflow-hidden">

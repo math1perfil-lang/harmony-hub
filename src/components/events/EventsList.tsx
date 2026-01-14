@@ -7,11 +7,10 @@ import type { Event } from '@/types/database';
 
 interface EventsListProps {
   houseId: string;
-  houseSlug: string;
   limit?: number;
 }
 
-export function EventsList({ houseId, houseSlug, limit }: EventsListProps) {
+export function EventsList({ houseId, limit }: EventsListProps) {
   const { data: events, isLoading } = useQuery({
     queryKey: ['events', houseId],
     queryFn: async () => {
@@ -62,7 +61,7 @@ export function EventsList({ houseId, houseSlug, limit }: EventsListProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {events.map((event) => (
-        <EventCard key={event.id} event={event} houseSlug={houseSlug} />
+        <EventCard key={event.id} event={event} />
       ))}
     </div>
   );

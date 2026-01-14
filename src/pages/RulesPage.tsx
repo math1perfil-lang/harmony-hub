@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { useHouse } from '@/contexts/HouseContext';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -7,19 +5,7 @@ import { Shield, AlertTriangle, Heart, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function RulesPage() {
-  const { slug } = useParams<{ slug: string }>();
-  const { house, isLoading, setHouseBySlug } = useHouse();
-
-  useEffect(() => {
-    if (!slug || slug.startsWith(':')) return;
-    if (!house || house.slug !== slug) {
-      setHouseBySlug(slug);
-    }
-  }, [slug, house, setHouseBySlug]);
-
-  if (!slug || slug.startsWith(':')) {
-    return <Navigate to="/" replace />;
-  }
+  const { house, isLoading } = useHouse();
 
   if (isLoading || !house) {
     return (

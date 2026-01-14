@@ -17,13 +17,11 @@ export function Header() {
   const { user, profile, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const basePath = house ? `/${house.slug}` : '';
-
   const navItems = [
-    { label: 'Início', href: basePath || '/' },
-    { label: 'Sobre', href: `${basePath}/sobre` },
-    { label: 'Eventos', href: `${basePath}/eventos` },
-    { label: 'Regras', href: `${basePath}/regras` },
+    { label: 'Início', href: '/' },
+    { label: 'Sobre', href: '/sobre' },
+    { label: 'Eventos', href: '/eventos' },
+    { label: 'Regras', href: '/regras' },
   ];
 
   return (
@@ -31,7 +29,7 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to={basePath || '/'} className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             {house?.logo_url ? (
               <img 
                 src={house.logo_url} 
@@ -46,7 +44,7 @@ export function Header() {
               </div>
             )}
             <span className="font-display text-xl font-semibold hidden sm:block">
-              {house?.name || 'Event Houses'}
+              {house?.name || 'Event House'}
             </span>
           </Link>
 
@@ -85,10 +83,10 @@ export function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem asChild>
-                    <Link to={`${basePath}/perfil`}>Meu Perfil</Link>
+                    <Link to="/perfil">Meu Perfil</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`${basePath}/meus-eventos`}>Meus Eventos</Link>
+                    <Link to="/meus-eventos">Meus Eventos</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-destructive">
@@ -100,10 +98,10 @@ export function Header() {
             ) : (
               <>
                 <Button variant="ghost" asChild>
-                  <Link to={`${basePath}/login`}>Entrar</Link>
+                  <Link to="/login">Entrar</Link>
                 </Button>
                 <Button asChild className="bg-gradient-primary hover:opacity-90">
-                  <Link to={`${basePath}/cadastro`}>Cadastrar</Link>
+                  <Link to="/cadastro">Cadastrar</Link>
                 </Button>
               </>
             )}
@@ -136,7 +134,7 @@ export function Header() {
               {user ? (
                 <>
                   <Link
-                    to={`${basePath}/perfil`}
+                    to="/perfil"
                     className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -155,10 +153,10 @@ export function Header() {
               ) : (
                 <div className="flex gap-2 px-4">
                   <Button variant="outline" asChild className="flex-1">
-                    <Link to={`${basePath}/login`}>Entrar</Link>
+                    <Link to="/login">Entrar</Link>
                   </Button>
                   <Button asChild className="flex-1 bg-gradient-primary">
-                    <Link to={`${basePath}/cadastro`}>Cadastrar</Link>
+                    <Link to="/cadastro">Cadastrar</Link>
                   </Button>
                 </div>
               )}

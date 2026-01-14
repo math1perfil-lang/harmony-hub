@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { EventsList } from '@/components/events/EventsList';
 import { useHouse } from '@/contexts/HouseContext';
@@ -7,19 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Calendar } from 'lucide-react';
 
 export default function EventsPage() {
-  const { slug } = useParams<{ slug: string }>();
-  const { house, isLoading, setHouseBySlug } = useHouse();
-
-  useEffect(() => {
-    if (!slug || slug.startsWith(':')) return;
-    if (!house || house.slug !== slug) {
-      setHouseBySlug(slug);
-    }
-  }, [slug, house, setHouseBySlug]);
-
-  if (!slug || slug.startsWith(':')) {
-    return <Navigate to="/" replace />;
-  }
+  const { house, isLoading } = useHouse();
 
   if (isLoading || !house) {
     return (
@@ -60,7 +46,7 @@ export default function EventsPage() {
       {/* Events List */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <EventsList houseId={house.id} houseSlug={house.slug} />
+          <EventsList houseId={house.id} />
         </div>
       </section>
     </Layout>
