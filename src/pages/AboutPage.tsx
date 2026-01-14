@@ -1,24 +1,10 @@
-import { useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { useHouse } from '@/contexts/HouseContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Info } from 'lucide-react';
 
 export default function AboutPage() {
-  const { slug } = useParams<{ slug: string }>();
-  const { house, isLoading, setHouseBySlug } = useHouse();
-
-  useEffect(() => {
-    if (!slug || slug.startsWith(':')) return;
-    if (!house || house.slug !== slug) {
-      setHouseBySlug(slug);
-    }
-  }, [slug, house, setHouseBySlug]);
-
-  if (!slug || slug.startsWith(':')) {
-    return <Navigate to="/" replace />;
-  }
+  const { house, isLoading } = useHouse();
 
   if (isLoading || !house) {
     return (

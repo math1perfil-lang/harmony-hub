@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/layout/Layout';
 import { EventsList } from '@/components/events/EventsList';
@@ -8,19 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowRight, Shield, Users, Heart, Calendar } from 'lucide-react';
 
 export default function HouseLanding() {
-  const { slug } = useParams<{ slug: string }>();
-  const { house, isLoading, error, setHouseBySlug } = useHouse();
-
-  useEffect(() => {
-    if (!slug || slug.startsWith(':')) return;
-    if (!house || house.slug !== slug) {
-      setHouseBySlug(slug);
-    }
-  }, [slug, house, setHouseBySlug]);
-
-  if (!slug || slug.startsWith(':')) {
-    return <Navigate to="/" replace />;
-  }
+  const { house, isLoading, error } = useHouse();
 
   if (isLoading) {
     return (
@@ -46,11 +33,8 @@ export default function HouseLanding() {
             Casa não encontrada
           </h1>
           <p className="text-muted-foreground mb-8">
-            A casa de eventos que você procura não existe ou não está disponível.
+            {error || 'A casa de eventos não está disponível no momento.'}
           </p>
-          <Button asChild>
-            <Link to="/">Voltar ao início</Link>
-          </Button>
         </div>
       </div>
     );
@@ -75,13 +59,13 @@ export default function HouseLanding() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Button size="lg" asChild className="bg-gradient-primary hover:opacity-90 shadow-glow">
-                <Link to={`/${house.slug}/eventos`}>
+                <Link to="/eventos">
                   Ver Eventos
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to={`/${house.slug}/sobre`}>Conhecer a Casa</Link>
+                <Link to="/sobre">Conhecer a Casa</Link>
               </Button>
             </div>
           </div>
@@ -136,14 +120,14 @@ export default function HouseLanding() {
               </p>
             </div>
             <Button variant="outline" asChild>
-              <Link to={`/${house.slug}/eventos`}>
+              <Link to="/eventos">
                 <Calendar className="mr-2 h-4 w-4" />
                 Ver Todos
               </Link>
             </Button>
           </div>
           
-          <EventsList houseId={house.id} houseSlug={house.slug} limit={3} />
+          <EventsList houseId={house.id} limit={3} />
         </div>
       </section>
 
@@ -157,7 +141,7 @@ export default function HouseLanding() {
             Crie sua conta e tenha acesso exclusivo à nossa área social, conecte-se com outros participantes antes dos eventos.
           </p>
           <Button size="lg" asChild className="bg-gradient-primary hover:opacity-90 shadow-glow">
-            <Link to={`/${house.slug}/cadastro`}>
+            <Link to="/cadastro">
               Criar Minha Conta
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
