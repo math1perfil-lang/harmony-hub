@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowRight, Shield, Users, Heart, Calendar } from 'lucide-react';
 
 export default function HouseLanding() {
-  const { house, isLoading, error } = useHouse();
+  const { house, isLoading, error, retry } = useHouse();
 
   if (isLoading) {
     return (
@@ -35,6 +35,9 @@ export default function HouseLanding() {
           <p className="text-muted-foreground mb-8">
             {error || 'A casa de eventos não está disponível no momento.'}
           </p>
+          <Button onClick={retry} className="bg-gradient-primary hover:opacity-90">
+            Tentar novamente
+          </Button>
         </div>
       </div>
     );
