@@ -158,13 +158,56 @@ export type Database = {
           },
         ]
       }
+      house_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          house_id: string
+          id: string
+          image_url: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          house_id: string
+          id?: string
+          image_url: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          house_id?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "house_photos_house_id_fkey"
+            columns: ["house_id"]
+            isOneToOne: false
+            referencedRelation: "houses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       houses: {
         Row: {
           about: string | null
+          address: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          cover_image_url: string | null
           created_at: string | null
           custom_domain: string | null
           description: string | null
           id: string
+          instagram_url: string | null
           is_active: boolean | null
           logo_url: string | null
           name: string
@@ -176,10 +219,15 @@ export type Database = {
         }
         Insert: {
           about?: string | null
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          cover_image_url?: string | null
           created_at?: string | null
           custom_domain?: string | null
           description?: string | null
           id?: string
+          instagram_url?: string | null
           is_active?: boolean | null
           logo_url?: string | null
           name: string
@@ -191,10 +239,15 @@ export type Database = {
         }
         Update: {
           about?: string | null
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          cover_image_url?: string | null
           created_at?: string | null
           custom_domain?: string | null
           description?: string | null
           id?: string
+          instagram_url?: string | null
           is_active?: boolean | null
           logo_url?: string | null
           name?: string
@@ -396,6 +449,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_house_with_admin: {
+        Args: { _description?: string; _name: string; _slug: string }
+        Returns: string
+      }
       get_user_house_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
