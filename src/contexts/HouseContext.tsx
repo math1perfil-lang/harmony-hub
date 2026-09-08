@@ -1,9 +1,16 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { getPathSlug, getSubdomainSlug } from '@/lib/tenant';
 import type { House } from '@/types/database';
 
 interface HouseContextType {
   house: House | null;
+  slug: string | null;
+  /** Prefix to prepend to internal links ("" on a subdomain, "/c/slug" otherwise). */
+  basePath: string;
+  href: (path: string) => string;
+  isPlatform: boolean;
   isLoading: boolean;
   error: string | null;
   retry: () => void;
@@ -12,20 +19,31 @@ interface HouseContextType {
 const HouseContext = createContext<HouseContextType | undefined>(undefined);
 
 export function HouseProvider({ children }: { children: ReactNode }) {
+  const location = useLocation();
+  const subdomainSlug = useMemo(() => getSubdomainSlug(), []);
+  const pathSlug = getPathSlug(location.pathname);
+  const slug = subdomainSlug ?? pathSlug;
+  const basePath = subdomainSlug ? '' : pathSlug ? `/c/${pathSlug}` : '';
+
   const [house, setHouse] = useState<House | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!!slug);
   const [error, setError] = useState<string | null>(null);
 
-  const loadHouse = async () => {
+  const loadHouse = useCallback(async () => {
+    if (!slug) {
+      setHouse(null);
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
-      // Single-house mode: Load the first active house
       const { data, error: fetchError } = await supabase
         .from('houses')
         .select('*')
+        .eq('slug', slug)
         .eq('is_active', true)
-        .limit(1)
         .maybeSingle();
 
       if (fetchError) throw fetchError;
@@ -33,24 +51,35 @@ export function HouseProvider({ children }: { children: ReactNode }) {
       if (data) {
         setHouse(data as House);
       } else {
-        setError('Nenhuma casa de eventos configurada');
+        setHouse(null);
+        setError('Casa não encontrada');
       }
     } catch (err: any) {
       const msg = typeof err?.message === 'string' ? err.message : null;
-      // Most common in preview when backend is temporarily unreachable
-      setError(msg ? `Erro ao carregar casa de eventos: ${msg}` : 'Erro ao carregar casa de eventos');
+      setError(msg ? `Erro ao carregar a casa: ${msg}` : 'Erro ao carregar a casa');
       console.error(err);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [slug]);
 
   useEffect(() => {
     loadHouse();
-  }, []);
+  }, [loadHouse]);
+
+  const href = useCallback(
+    (path: string) => {
+      const clean = path.startsWith('/') ? path : `/${path}`;
+      if (!basePath) return clean;
+      return clean === '/' ? basePath : `${basePath}${clean}`;
+    },
+    [basePath]
+  );
 
   return (
-    <HouseContext.Provider value={{ house, isLoading, error, retry: loadHouse }}>
+    <HouseContext.Provider
+      value={{ house, slug, basePath, href, isPlatform: !slug, isLoading, error, retry: loadHouse }}
+    >
       {children}
     </HouseContext.Provider>
   );
