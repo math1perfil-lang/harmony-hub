@@ -8,7 +8,9 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   roles: AppRole[];
+  adminHouseIds: string[];
   isLoading: boolean;
+  refreshProfile: () => Promise<void>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -22,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [roles, setRoles] = useState<AppRole[]>([]);
+  const [adminHouseIds, setAdminHouseIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
@@ -32,17 +35,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .eq('user_id', userId)
         .maybeSingle();
 
-      if (profileData) {
-        setProfile(profileData as Profile);
-      }
+      setProfile((profileData as Profile) ?? null);
 
       const { data: rolesData } = await supabase
         .from('user_roles')
-        .select('role')
+        .select('role, house_id')
         .eq('user_id', userId);
 
       if (rolesData) {
         setRoles(rolesData.map(r => r.role as AppRole));
+        setAdminHouseIds(
+          rolesData
+            .filter(r => r.role === 'house_admin' && r.house_id)
+            .map(r => r.house_id as string)
+        );
       }
     } catch (err) {
       console.error('Error fetching profile:', err);
@@ -105,6 +111,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSession(null);
     setProfile(null);
     setRoles([]);
+    setAdminHouseIds([]);
+  };
+
+  const refreshProfile = async () => {
+    if (user) await fetchProfile(user.id);
   };
 
   const hasRole = (role: AppRole) => roles.includes(role);
@@ -115,7 +126,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       profile,
       roles,
+      adminHouseIds,
       isLoading,
+      refreshProfile,
       signUp,
       signIn,
       signOut,
