@@ -5,44 +5,32 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HouseProvider } from "@/contexts/HouseContext";
 import { AuthProvider } from "@/contexts/AuthContext";
-import HouseLanding from "./pages/HouseLanding";
-import EventsPage from "./pages/EventsPage";
-import EventDetailPage from "./pages/EventDetailPage";
-import AboutPage from "./pages/AboutPage";
-import RulesPage from "./pages/RulesPage";
-import SocialPage from "./pages/SocialPage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import CompleteProfilePage from "./pages/CompleteProfilePage";
-import EventChatPage from "./pages/EventChatPage";
-import NotFound from "./pages/NotFound";
+import { getSubdomainSlug } from "@/lib/tenant";
+import HouseRoutes from "./routes/HouseRoutes";
+import PlatformRoutes from "./routes/PlatformRoutes";
 
 const queryClient = new QueryClient();
+
+const hasSubdomain = !!getSubdomainSlug();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <HouseProvider>
-        <AuthProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <HouseProvider>
+          <AuthProvider>
             <Routes>
-              <Route path="/" element={<HouseLanding />} />
-              <Route path="/eventos" element={<EventsPage />} />
-              <Route path="/evento/:eventId" element={<EventDetailPage />} />
-              <Route path="/evento/:eventId/social" element={<SocialPage />} />
-              <Route path="/evento/:eventId/chat/:otherProfileId" element={<EventChatPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/cadastro" element={<SignupPage />} />
-              <Route path="/completar-perfil" element={<CompleteProfilePage />} />
-              <Route path="/sobre" element={<AboutPage />} />
-              <Route path="/regras" element={<RulesPage />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="/c/:slug/*" element={<HouseRoutes />} />
+              <Route
+                path="/*"
+                element={hasSubdomain ? <HouseRoutes /> : <PlatformRoutes />}
+              />
             </Routes>
-          </BrowserRouter>
-        </AuthProvider>
-      </HouseProvider>
+          </AuthProvider>
+        </HouseProvider>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
