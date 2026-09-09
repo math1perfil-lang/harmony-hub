@@ -111,6 +111,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSession(null);
     setProfile(null);
     setRoles([]);
+    setAdminHouseIds([]);
+  };
+
+  const refreshProfile = async () => {
+    if (user) await fetchProfile(user.id);
   };
 
   const hasRole = (role: AppRole) => roles.includes(role);
@@ -121,7 +126,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       profile,
       roles,
+      adminHouseIds,
       isLoading,
+      refreshProfile,
       signUp,
       signIn,
       signOut,
