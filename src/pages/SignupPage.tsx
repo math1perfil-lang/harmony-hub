@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
+import { useHouse } from '@/contexts/HouseContext';
 
 const signupSchema = z
   .object({
@@ -22,6 +23,7 @@ const signupSchema = z
 
 export default function SignupPage() {
   const { user, isLoading, signUp } = useAuth();
+  const { href } = useHouse();
   const [searchParams] = useSearchParams();
   const redirect = useMemo(() => searchParams.get('redirect') || '/', [searchParams]);
 

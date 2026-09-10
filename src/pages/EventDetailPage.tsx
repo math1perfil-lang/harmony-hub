@@ -16,7 +16,7 @@ import type { Event } from '@/types/database';
 
 export default function EventDetailPage() {
   const { eventId } = useParams<{ eventId: string }>();
-  const { house, isLoading: houseLoading } = useHouse();
+  const { house, isLoading: houseLoading, href } = useHouse();
   const { user, profile } = useAuth();
 
   const { data: event, isLoading: eventLoading } = useQuery({
