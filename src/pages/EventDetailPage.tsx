@@ -87,12 +87,12 @@ export default function EventDetailPage() {
 
   const handleJoinList = async () => {
     if (!user) {
-      window.location.href = `/login?redirect=/evento/${eventId}`;
+      window.location.href = href(`/login?redirect=/evento/${eventId}`);
       return;
     }
 
     if (!profile) {
-      window.location.href = `/completar-perfil?redirect=/evento/${eventId}`;
+      window.location.href = href(`/completar-perfil?redirect=/evento/${eventId}`);
       return;
     }
 

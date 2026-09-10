@@ -55,7 +55,7 @@ export default function SignupPage() {
       }
       // After signup, user might need to confirm email depending on backend settings.
       // We still allow continuing to profile completion to keep flow simple.
-      window.location.href = `/completar-perfil?redirect=${encodeURIComponent(redirect)}`;
+      window.location.href = href(`/completar-perfil?redirect=${encodeURIComponent(redirect)}`);
     } finally {
       setSubmitting(false);
     }
