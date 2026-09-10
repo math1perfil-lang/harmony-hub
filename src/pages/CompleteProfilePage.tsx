@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Link, Navigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
+import { TenantLink as Link } from '@/components/TenantLink';
 import { z } from 'zod';
 import { Layout } from '@/components/layout/Layout';
 import { Card } from '@/components/ui/card';

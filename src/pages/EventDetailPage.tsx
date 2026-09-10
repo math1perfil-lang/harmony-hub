@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { TenantLink as Link } from '@/components/TenantLink';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Layout } from '@/components/layout/Layout';
@@ -15,7 +16,7 @@ import type { Event } from '@/types/database';
 
 export default function EventDetailPage() {
   const { eventId } = useParams<{ eventId: string }>();
-  const { house, isLoading: houseLoading } = useHouse();
+  const { house, isLoading: houseLoading, href } = useHouse();
   const { user, profile } = useAuth();
 
   const { data: event, isLoading: eventLoading } = useQuery({
@@ -86,12 +87,12 @@ export default function EventDetailPage() {
 
   const handleJoinList = async () => {
     if (!user) {
-      window.location.href = `/login?redirect=/evento/${eventId}`;
+      window.location.href = href(`/login?redirect=/evento/${eventId}`);
       return;
     }
 
     if (!profile) {
-      window.location.href = `/completar-perfil?redirect=/evento/${eventId}`;
+      window.location.href = href(`/completar-perfil?redirect=/evento/${eventId}`);
       return;
     }
 

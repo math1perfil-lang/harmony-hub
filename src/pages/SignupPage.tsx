@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Link, Navigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
+import { TenantLink as Link } from '@/components/TenantLink';
 import { z } from 'zod';
 import { Layout } from '@/components/layout/Layout';
 import { Card } from '@/components/ui/card';
@@ -7,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
+import { useHouse } from '@/contexts/HouseContext';
 
 const signupSchema = z
   .object({
@@ -21,6 +23,7 @@ const signupSchema = z
 
 export default function SignupPage() {
   const { user, isLoading, signUp } = useAuth();
+  const { href } = useHouse();
   const [searchParams] = useSearchParams();
   const redirect = useMemo(() => searchParams.get('redirect') || '/', [searchParams]);
 
@@ -54,7 +57,7 @@ export default function SignupPage() {
       }
       // After signup, user might need to confirm email depending on backend settings.
       // We still allow continuing to profile completion to keep flow simple.
-      window.location.href = `/completar-perfil?redirect=${encodeURIComponent(redirect)}`;
+      window.location.href = href(`/completar-perfil?redirect=${encodeURIComponent(redirect)}`);
     } finally {
       setSubmitting(false);
     }

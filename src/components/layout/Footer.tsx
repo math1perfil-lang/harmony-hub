@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { TenantLink as Link } from '@/components/TenantLink';
 import { useHouse } from '@/contexts/HouseContext';
 import { Shield, Heart } from 'lucide-react';
 

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { TenantLink as Link } from '@/components/TenantLink';
 import { Button } from '@/components/ui/button';
 import { useHouse } from '@/contexts/HouseContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -14,8 +14,9 @@ import {
 
 export function Header() {
   const { house } = useHouse();
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, adminHouseIds } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isHouseAdmin = !!house && adminHouseIds.includes(house.id);
 
   const navItems = [
     { label: 'Início', href: '/' },
@@ -88,6 +89,11 @@ export function Header() {
                   <DropdownMenuItem asChild>
                     <Link to="/meus-eventos">Meus Eventos</Link>
                   </DropdownMenuItem>
+                  {isHouseAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/painel">Painel da casa</Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-destructive">
                     <LogOut className="h-4 w-4 mr-2" />

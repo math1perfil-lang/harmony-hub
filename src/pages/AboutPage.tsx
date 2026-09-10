@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { Layout } from '@/components/layout/Layout';
 import { useHouse } from '@/contexts/HouseContext';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -5,6 +7,20 @@ import { Info } from 'lucide-react';
 
 export default function AboutPage() {
   const { house, isLoading } = useHouse();
+
+  const { data: photos } = useQuery({
+    queryKey: ['house-photos', house?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('house_photos')
+        .select('*')
+        .eq('house_id', house!.id)
+        .order('sort_order');
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!house?.id,
+  });
 
   if (isLoading || !house) {
     return (
@@ -56,6 +72,25 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {!!photos?.length && (
+        <section className="pb-20">
+          <div className="container mx-auto px-4">
+            <h2 className="font-display text-2xl font-bold mb-6">Conheça o espaço</h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {photos.map((photo) => (
+                <img
+                  key={photo.id}
+                  src={photo.image_url}
+                  alt={photo.caption || `Foto da ${house.name}`}
+                  loading="lazy"
+                  className="aspect-[4/3] w-full object-cover rounded-xl border border-border/50"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </Layout>
   );
 }

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { TenantLink as Link } from '@/components/TenantLink';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock } from 'lucide-react';
