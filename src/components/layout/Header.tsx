@@ -89,6 +89,11 @@ export function Header() {
                   <DropdownMenuItem asChild>
                     <Link to="/meus-eventos">Meus Eventos</Link>
                   </DropdownMenuItem>
+                  {isHouseAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/painel">Painel da casa</Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-destructive">
                     <LogOut className="h-4 w-4 mr-2" />
