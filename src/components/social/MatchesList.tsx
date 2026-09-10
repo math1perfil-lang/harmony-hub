@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { TenantLink as Link } from '@/components/TenantLink';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { User, MessageCircle, Heart } from 'lucide-react';

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { TenantLink as Link } from '@/components/TenantLink';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/layout/Layout';
 import { EventsList } from '@/components/events/EventsList';
