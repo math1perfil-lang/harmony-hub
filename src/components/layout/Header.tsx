@@ -14,8 +14,9 @@ import {
 
 export function Header() {
   const { house } = useHouse();
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, adminHouseIds } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isHouseAdmin = !!house && adminHouseIds.includes(house.id);
 
   const navItems = [
     { label: 'Início', href: '/' },
